@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { FaArrowCircleLeft } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import Swal from "sweetalert2";
 
-const AddUser = () => {
+const UpdateUser = () => {
+    const loadedUser = useLoaderData();
     const [genderValue, setGenderValue] = useState();
     const [statusValue, setStatusValue] = useState();
-    const handleAddUser = e => {
+    const handleUpdateUser = e => {
         e.preventDefault();
         const form = e.target;
         const name = form.name.value;
@@ -15,8 +16,8 @@ const AddUser = () => {
         const status = statusValue;
         const user = { name, email, gender, status }
         // console.log(user);
-        fetch('http://localhost:5000/users', {
-            method: "POST",
+        fetch(`http://localhost:5000/users/${loadedUser._id}`, {
+            method: "PATCH",
             headers: {
                 'content-type': "application/json"
             },
@@ -24,10 +25,11 @@ const AddUser = () => {
         })
             .then(res => res.json())
             .then(data => {
-                if (data.insertedId) {
+                // console.log(data);
+                if (data.modifiedCount) {
                     Swal.fire({
                         title: 'Success!',
-                        text: 'Successfully Added User',
+                        text: 'Successfully Update User Information',
                         icon: 'success',
                         confirmButtonText: 'Ok'
                     })
@@ -39,17 +41,17 @@ const AddUser = () => {
         <div>
             <Link to='/'><h3 className="text-xl font-semibold flex items-center gap-2"><FaArrowCircleLeft /> All Users</h3></Link>
             <div className="text-center w-10/12 mx-auto my-10">
-                <h1 className="text-2xl font-semibold">New User</h1>
-                <p className="">User the below form to create a new account</p>
+                <h1 className="text-2xl font-semibold">Update User Information</h1>
+                <p className="">Here you can update your user information</p>
 
-                <form onSubmit={handleAddUser} className="my-5 w-full space-y-4">
+                <form onSubmit={handleUpdateUser} className="my-5 w-full space-y-4">
                     <div className="text-start">
                         <span className="text-lg font-bold">Name:</span>
-                        <input className="w-full p-2 border" type="text" name="name" />
+                        <input className="w-full p-2 border" defaultValue={loadedUser.name} type="text" name="name" />
                     </div>
                     <div className="text-start">
                         <span className="text-lg font-bold">Email:</span>
-                        <input className="w-full p-2 border" type="email" name="email" />
+                        <input className="w-full p-2 border" type="email" defaultValue={loadedUser.email} name="email" />
                     </div>
                     <div className="text-start flex items-center gap-2">
                         <span className="text-lg font-bold">Gender:</span>
@@ -70,4 +72,4 @@ const AddUser = () => {
     );
 };
 
-export default AddUser;
+export default UpdateUser;

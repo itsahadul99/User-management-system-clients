@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 // import { useState } from "react";
 import { FaUser } from "react-icons/fa";
 import { FaPen } from "react-icons/fa6";
@@ -66,7 +67,7 @@ const AllUsers = ({ users, setUsers }) => {
                                 <td>{user.gender}</td>
                                 <td>{user.status}</td>
                                 <td className="flex gap-2 items-center">
-                                    <button className="shadow-md px-3 py-2 text-purple-400 bg-white"><FaPen size={20} /></button>
+                                    <Link to={`/users/${user._id}`}><button className="shadow-md px-3 py-2 text-purple-400 bg-white"><FaPen size={20} /></button></Link>
                                     <button onClick={() => handleDeleteUser(user._id)} className="shadow-md px-3 py-2 text-purple-400 bg-white"><MdClose size={20} /></button>
                                 </td>
                             </tr>)
